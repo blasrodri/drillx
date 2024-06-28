@@ -8,3 +8,5 @@ name = "example-4"
 
 [dependencies]
 drillx = { path = "../../drillx" }
+rand = "0.8.5"
+rng = "0.1.0"

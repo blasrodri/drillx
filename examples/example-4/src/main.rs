@@ -1,26 +1,12 @@
 use std::{collections::HashMap, time::Instant};
 
 use drillx::{equix::SolverMemory, Hash};
+use rand::Rng;
 
 fn main() {
-    let timer = Instant::now();
-    let challenge = [255; 32];
-    let mut memory = SolverMemory::new();
-    let mut hash_count = HashMap::<u32, u64>::new();
-    let mut nonce: u64 = 0;
+    let mut rng = rand::thread_rng();
     loop {
-        // Track difficulties
-        // if let Ok(hx) = drillx::hash_with_memory(&mut memory, &challenge, &nonce.to_le_bytes()) {
-        //     let diff = hx.difficulty();
-        //     hash_count.insert(diff, hash_count.get(&diff).unwrap_or(&0).saturating_add(1));
-        //     if nonce % 100 == 0 {
-        //         print(&hash_count, &timer);
-        //     }
-        // }
-
-        // // Increment nonce
-        // nonce += 1;
-
+        let challenge: [u8; 32] = rng.gen();
         let threads = 10;
         let handles: Vec<_> = (0..threads)
             .map(|i| {
@@ -36,7 +22,7 @@ fn main() {
                             // Create hash
                             if let Ok(hx) = drillx::hash_with_memory(
                                 &mut memory,
-                                &[255; 32],
+                                &challenge,
                                 &nonce.to_le_bytes(),
                             ) {
                                 let difficulty = hx.difficulty();
